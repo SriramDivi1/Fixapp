@@ -74,13 +74,13 @@ const Navbar = () => {
           </button>
         )}
 
-        <img onClick={() => setShowMenu(true)} className='w-6 md:hidden' src={assets.menu_icon} alt="" />
+        <img onClick={() => setShowMenu(true)} className='w-6 md:hidden' src={assets.menu_icon} alt="Menu icon" />
 
         {/* ---- Mobile Menu ---- */}
         <div className={`md:hidden ${showMenu ? 'fixed w-full' : 'h-0 w-0'} right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}>
           <div className='flex items-center justify-between px-5 py-6'>
-            <img src={assets.logo} className='w-36' alt="" />
-            <img onClick={() => setShowMenu(false)} src={assets.cross_icon} className='w-7' alt="" />
+            <img src={assets.logo} className='w-36' alt="Fixapp logo" />
+            <img onClick={() => setShowMenu(false)} src={assets.cross_icon} className='w-7' alt="Close menu" />
           </div>
           <ul className='flex flex-col items-center gap-2 mt-5 px-5 text-lg font-medium'>
             <NavLink onClick={() => setShowMenu(false)} to='/'><p className='px-4 py-2 rounded full inline-block'>HOME</p></NavLink>

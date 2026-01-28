@@ -3,11 +3,12 @@ import { addDoctor, adminDashboard, allDoctors, appointmentCancel, appointmentsA
 import upload from '../middlewares/multer.js'
 import authAdmin from '../middlewares/authAdmin.js';
 import { changeAvailability } from '../controllers/doctorController.js';
+import { validateAddDoctor, validateUserLogin } from '../middlewares/validation.js';
 
 const adminRouter = express.Router();
 
-adminRouter.post("/login", loginAdmin)
-adminRouter.post("/add-doctor", authAdmin, upload.single('image'), addDoctor)
+adminRouter.post("/login", validateUserLogin, loginAdmin)
+adminRouter.post("/add-doctor", authAdmin, upload.single('image'), validateAddDoctor, addDoctor)
 adminRouter.get("/all-doctors", authAdmin, allDoctors)
 adminRouter.post("/change-availability", authAdmin, changeAvailability)
 adminRouter.get("/appointments", authAdmin, appointmentsAdmin)

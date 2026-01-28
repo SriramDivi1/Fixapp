@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import validator from "validator";
 import { v2 as cloudinary } from "cloudinary";
 import userModel from "../models/userModel.js"
+import logger from '../utils/logger.js';
 
 // API for admin login
 const loginAdmin = async (req, res) => {
@@ -13,15 +14,15 @@ const loginAdmin = async (req, res) => {
         const { email, password } = req.body
 
         if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASSWORD) {
-            const token = jwt.sign(email + password, process.env.JWT_SECRET)
+            const token = jwt.sign({ role: 'admin', email }, process.env.JWT_SECRET, { expiresIn: '7d' })
             res.json({ success: true, token })
         } else {
             res.json({ success: false, message: "Invalid credentials" })
         }
 
     } catch (error) {
-        console.log(error)
-        res.json({ success: false, message: error.message })
+        logger.error('Admin login error:', error)
+        res.json({ success: false, message: 'Login failed. Please try again.' })
     }
 
 }
@@ -60,7 +61,7 @@ const addDoctor = async (req, res) => {
       experience,
       about,
       fees,
-      address: JSON.parse(address),
+      address: typeof address === 'string' ? JSON.parse(address) : address,
       date: Date.now()
     };
 
@@ -70,8 +71,8 @@ const addDoctor = async (req, res) => {
     res.status(200).json({ success: true, message: "Doctor Added" });
 
   } catch (error) {
-    console.error("Error adding doctor:", error);
-    res.status(500).json({ success: false, message: error.message || "Internal Server Error" });
+    logger.error("Error adding doctor:", error);
+    res.status(500).json({ success: false, message: "Failed to add doctor. Please try again." });
   }
 };
 
