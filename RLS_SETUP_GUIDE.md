@@ -34,7 +34,7 @@ RLS policies control which rows users can access in database tables. For Fixapp:
 3. **Copy and Execute RLS Policies**
 
    ```sql
-   -- Copy the entire contents of supabase/rls-policies.sql
+   -- Copy the entire contents of supabase/migrations/20260128_enable_rls_policies.sql
    -- Paste into the SQL editor
    -- Click "Run" or press Cmd/Ctrl + Enter
    ```
@@ -52,14 +52,14 @@ supabase link --project-ref YOUR_PROJECT_REF
 # Create a new migration file
 supabase migration new enable_rls_policies
 
-# Copy contents from rls-policies.sql to the new migration file
-cat supabase/rls-policies.sql > supabase/migrations/TIMESTAMP_enable_rls_policies.sql
+# Copy contents to the migration file (already exists as 20260128_enable_rls_policies.sql)
+# No need to copy - file already exists
 
 # Apply the migration
 supabase db push
 
-# Verify policies
-supabase db dump --data-only
+# Verify policies were applied
+supabase db dump --schema-only | grep -A 5 "CREATE POLICY"
 ```
 
 ## Testing RLS Policies
@@ -165,7 +165,7 @@ SELECT tablename, rowsecurity
 FROM pg_tables
 WHERE schemaname = 'public';
 
--- Re-apply policies from rls-policies.sql
+-- Re-apply policies from supabase/migrations/20260128_enable_rls_policies.sql
 ```
 
 ### Issue: No data returned after enabling RLS

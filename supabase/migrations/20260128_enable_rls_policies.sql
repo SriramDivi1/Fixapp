@@ -103,9 +103,16 @@ CREATE POLICY "Users can view own notifications" ON public.notifications
 CREATE POLICY "Users can update own notifications" ON public.notifications
   FOR UPDATE USING (user_id = auth.uid());
 
--- System can create notifications for users
-CREATE POLICY "System can create notifications" ON public.notifications
-  FOR INSERT WITH CHECK (true);
+-- Only service role (backend) or admins can create notifications
+-- This prevents users from creating fake notifications for other users
+CREATE POLICY "Service role can create notifications" ON public.notifications
+  FOR INSERT WITH CHECK (
+    auth.jwt() ->> 'role' = 'service_role' 
+    OR EXISTS (
+      SELECT 1 FROM public.user_profiles 
+      WHERE id = auth.uid() AND role = 'admin'
+    )
+  );
 
 -- Reviews Policies
 -- Anyone can view reviews (for doctor ratings)
