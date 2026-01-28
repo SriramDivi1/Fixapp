@@ -5,7 +5,7 @@
 
 export type UserRole = 'patient' | 'doctor' | 'admin';
 
-export type AppointmentStatus = 'scheduled' | 'completed' | 'cancelled' | 'no_show';
+export type AppointmentStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled' | 'scheduled' | 'no_show';
 
 export type PaymentStatus = 'pending' | 'completed' | 'failed' | 'refunded';
 
@@ -33,32 +33,34 @@ export interface UserProfile {
   id: string;
   email: string;
   full_name: string;
-  phone?: string;
+  phone_number?: string; // Changed from 'phone' to match schema
   date_of_birth?: string;
-  gender: Gender;
-  address: Address;
+  gender?: Gender;
+  address?: string; // Changed from Address object to string to match schema
   profile_image_url?: string;
   role: UserRole;
-  is_active: boolean;
-  created_at: string;
-  updated_at: string;
+  is_active?: boolean;
+  created_at?: string; // Made optional to handle missing values
+  updated_at?: string;
 }
 
 export interface Doctor {
   id: string;
   user_id: string;
-  medical_license: string;
-  speciality: string;
-  degree: string;
+  medical_license?: string;
+  specialization: string; // Changed from 'speciality' to match schema
+  qualification?: string; // Changed from 'degree'
   experience_years: number;
-  about?: string;
+  bio?: string; // Changed from 'about'
   consultation_fee: number;
   is_available: boolean;
-  office_address: Address;
-  working_hours: WorkingHours;
-  rating: number;
-  total_reviews: number;
+  office_address?: string; // Changed from Address object to string
+  working_hours?: WorkingHours;
+  rating?: number;
+  total_reviews?: number;
   verified_at?: string;
+  profile_image_url?: string; // Added for doctor profile image
+  full_name?: string; // Added for doctor name
   created_at: string;
   updated_at: string;
   user_profiles?: UserProfile;

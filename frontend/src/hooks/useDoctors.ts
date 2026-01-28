@@ -59,7 +59,7 @@ export const useDoctors = (options: UseDoctorsOptions = {}): UseQueryResult<Doct
       return data as Doctor[];
     },
     staleTime: 1000 * 60 * 5, // 5 minutes
-    cacheTime: 1000 * 60 * 30, // 30 minutes
+    gcTime: 1000 * 60 * 30, // 30 minutes (garbage collection time)
   });
 };
 
@@ -113,5 +113,6 @@ export const useDoctorSpecialities = (): UseQueryResult<string[], Error> => {
       return specialities.filter(Boolean) as string[];
     },
     staleTime: 1000 * 60 * 60, // 1 hour
+    gcTime: 1000 * 60 * 60 * 2, // 2 hours
   });
 };

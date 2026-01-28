@@ -61,7 +61,9 @@ const MyProfile: React.FC = () => {
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Member Since</label>
             <p className="text-gray-900">
-              {new Date(profile.created_at).toLocaleDateString()}
+              {profile.created_at
+                ? new Date(profile.created_at).toLocaleDateString()
+                : 'N/A'}
             </p>
           </div>
         </div>

@@ -7,11 +7,18 @@ const Navbar: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [showMenu, setShowMenu] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
   const { user, profile, signOut } = useAuth();
 
   const handleLogout = async () => {
-    await signOut();
-    navigate('/login');
+    try {
+      await signOut();
+      setShowDropdown(false);
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+      // Error toast is already shown by useAuth hook, just keep user on page
+    }
   };
 
   return (
@@ -52,16 +59,51 @@ const Navbar: React.FC = () => {
         )}
 
         {user && profile ? (
-          <div className='flex items-center gap-2 cursor-pointer group relative'>
-            <img className='w-12 rounded-full' src={profile.profile_image_url || '/fallback-user.png'} alt="profile" />
-            <img className='w-2.5' src={assets.dropdown_icon || '/fallback-icon.png'} alt="dropdown" />
-            <div className='absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 hidden group-hover:block'>
-              <div className='min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4'>
-                <p onClick={() => navigate('/my-profile')} className='hover:text-black cursor-pointer'>My Profile</p>
-                <p onClick={() => navigate('/my-appointments')} className='hover:text-black cursor-pointer'>My Appointments</p>
-                <p onClick={handleLogout} className='hover:text-black cursor-pointer'>Logout</p>
+          <div 
+            className='flex items-center gap-2 relative'
+            onMouseEnter={() => setShowDropdown(true)}
+            onMouseLeave={() => setShowDropdown(false)}
+          >
+            <button
+              onClick={() => setShowDropdown(!showDropdown)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  setShowDropdown(!showDropdown);
+                }
+              }}
+              className='flex items-center gap-2 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary rounded-full'
+              aria-haspopup="true"
+              aria-expanded={showDropdown}
+              aria-label="User profile menu"
+            >
+              <img className='w-12 rounded-full' src={profile.profile_image_url || '/fallback-user.png'} alt="profile" />
+              <img className='w-2.5' src={assets.dropdown_icon || '/fallback-icon.png'} alt="dropdown" />
+            </button>
+            {showDropdown && (
+              <div className='absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20'>
+                <div className='min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4 shadow-lg'>
+                  <button 
+                    onClick={() => { navigate('/my-profile'); setShowDropdown(false); }}
+                    className='hover:text-black cursor-pointer text-left focus:outline-none focus:text-primary'
+                  >
+                    My Profile
+                  </button>
+                  <button 
+                    onClick={() => { navigate('/my-appointments'); setShowDropdown(false); }}
+                    className='hover:text-black cursor-pointer text-left focus:outline-none focus:text-primary'
+                  >
+                    My Appointments
+                  </button>
+                  <button 
+                    onClick={handleLogout}
+                    className='hover:text-black cursor-pointer text-left focus:outline-none focus:text-primary'
+                  >
+                    Logout
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         ) : (
           <button

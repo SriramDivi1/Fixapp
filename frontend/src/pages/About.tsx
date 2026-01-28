@@ -9,7 +9,7 @@ const About: React.FC = () => {
       </div>
 
       <div className='my-10 flex flex-col md:flex-row gap-12'>
-        <img className='w-full md:max-w-[360px]' src={assets.about_image} alt="" />
+        <img className='w-full md:max-w-[360px]' src={assets.about_image} alt="Healthcare professionals collaborating" />
         <div className='flex flex-col justify-center gap-6 md:w-2/4 text-sm text-gray-600'>
           <p>Welcome to Appointy, your trusted partner in managing your healthcare needs conveniently and efficiently. At Appointy, we understand the challenges individuals face when it comes to scheduling doctor appointments and managing their health records.</p>
           <p>Appointy is committed to excellence in healthcare technology. We continuously strive to enhance our platform, integrating the latest advancements to improve user experience and deliver superior service. Whether you're booking your first appointment or managing ongoing care, Appointy is here to support you every step of the way.</p>
@@ -19,7 +19,7 @@ const About: React.FC = () => {
       </div>
 
       <div className='text-xl my-4'>
-        <p>WHY  <span className='text-gray-700 font-semibold'>CHOOSE US</span></p>
+        <p>WHY <span className='text-gray-700 font-semibold'>CHOOSE US</span></p>
       </div>
 
       <div className='flex flex-col md:flex-row mb-20'>

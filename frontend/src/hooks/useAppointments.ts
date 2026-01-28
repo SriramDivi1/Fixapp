@@ -74,7 +74,7 @@ export const useAppointments = (
     },
     enabled: !!(userId || doctorId),
     staleTime: 1000 * 30, // 30 seconds (appointments update frequently)
-    cacheTime: 1000 * 60 * 5, // 5 minutes
+    gcTime: 1000 * 60 * 5, // 5 minutes
   });
 };
 
@@ -207,11 +207,13 @@ export const useUpdateAppointmentStatus = (): UseMutationResult<
       // Invalidate queries
       queryClient.invalidateQueries({ queryKey: [APPOINTMENTS_QUERY_KEY] });
       
-      const statusMessages = {
+      const statusMessages: Record<AppointmentStatus, string> = {
         pending: 'Appointment status updated to pending',
         confirmed: 'Appointment confirmed!',
         cancelled: 'Appointment cancelled',
         completed: 'Appointment marked as completed',
+        scheduled: 'Appointment scheduled',
+        no_show: 'Appointment marked as no show',
       };
       
       toast.success(statusMessages[data.status] || 'Appointment updated');

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Doctor } from '../types/database';
 
@@ -26,17 +26,17 @@ const Doctors: React.FC = () => {
   // TODO: In Phase 3, replace with useDoctors() hook
   const doctors = SAMPLE_DOCTORS;
 
-  const applyFilter = () => {
+  const applyFilter = useCallback(() => {
     if (speciality) {
       setFilterDoc(doctors.filter((doc) => doc.specialization === speciality));
     } else {
       setFilterDoc(doctors);
     }
-  };
+  }, [doctors, speciality]);
 
   useEffect(() => {
     applyFilter();
-  }, [doctors, speciality]);
+  }, [applyFilter]);
 
   const handleSpecialityClick = (spec: Speciality) => {
     if (speciality === spec) {
