@@ -42,7 +42,7 @@ interface UploadProfileImageOptions {
  * ```
  */
 export const useUploadProfileImage = (options?: UploadProfileImageOptions) => {
-  const { user, refreshAuth } = useAuth();
+  const { user } = useAuth();
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -75,7 +75,7 @@ export const useUploadProfileImage = (options?: UploadProfileImageOptions) => {
 
       // Upload to Supabase Storage
       toast.info('Uploading...');
-      const publicUrl = await uploadToStorage('avatars', filePath, compressedFile);
+      const publicUrl = await uploadToStorage(compressedFile, 'avatars', filePath);
 
       // Update user profile in database
       const { error: updateError } = await supabase
@@ -93,9 +93,6 @@ export const useUploadProfileImage = (options?: UploadProfileImageOptions) => {
       // Invalidate profile queries
       queryClient.invalidateQueries({ queryKey: ['auth'] });
       queryClient.invalidateQueries({ queryKey: ['profile'] });
-      
-      // Refresh auth state to get updated profile
-      refreshAuth();
 
       toast.success('Profile picture updated successfully!');
       
@@ -153,7 +150,7 @@ export const useUploadDoctorImage = (options?: UploadProfileImageOptions) => {
       });
 
       const filePath = generateFilePath(user.id, file.name);
-      const publicUrl = await uploadToStorage('avatars', filePath, compressedFile);
+      const publicUrl = await uploadToStorage(compressedFile, 'avatars', filePath);
 
       // Update doctor profile
       const { error: updateError } = await supabase

@@ -1,5 +1,5 @@
 // Type declarations for assets module
-declare module '../assets/assets' {
+declare module '../assets/assets.js' {
   interface Assets {
     logo: string;
     about_image: string;
