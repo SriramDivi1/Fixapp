@@ -48,8 +48,8 @@ const registerUser = async (req, res) => {
         res.json({ success: true, token })
 
     } catch (error) {
-        logger.error('Login error:', error)
-        res.json({ success: false, message: 'Login failed. Please try again.' })
+        logger.error('Registration error:', error)
+        res.json({ success: false, message: 'Registration failed. Please try again.' })
     }
 }
 
@@ -74,8 +74,8 @@ const loginUser = async (req, res) => {
             res.json({ success: false, message: "Invalid credentials" })
         }
     } catch (error) {
-        console.log(error)
-        res.json({ success: false, message: error.message })
+        logger.error('Login error:', error)
+        res.json({ success: false, message: 'Login failed. Please try again.' })
     }
 }
 

@@ -84,6 +84,9 @@ const MyProfile = () => {
                             value={userData.phone}
                             aria-label="Phone number"
                             pattern="[0-9]*"
+                            minLength="10"
+                            maxLength="15"
+                            placeholder="10-15 digits"
                             disabled={loading}
                         />
                     ) : (

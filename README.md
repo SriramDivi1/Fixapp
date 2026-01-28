@@ -199,7 +199,7 @@ We welcome contributions! Please feel free to submit issues, fork the repository
 
 ### Vulnerability Reporting
 
-If you discover a security vulnerability, please email the maintainers directly instead of creating a public issue.
+If you discover a security vulnerability, please email security@fixapp.com (or create a private security advisory on GitHub) instead of creating a public issue.
 
 ## 🌟 Acknowledgements
 

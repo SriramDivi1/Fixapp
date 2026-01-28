@@ -104,6 +104,9 @@ const Login = () => {
             aria-label="Password"
             disabled={loading}
           />
+          {state === 'Sign Up' && (
+            <p className='text-xs text-gray-500 mt-1'>Must be at least 8 characters with uppercase, lowercase, and number</p>
+          )}
         </div>
         <button 
           type='submit' 

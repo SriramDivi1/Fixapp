@@ -54,7 +54,7 @@ export const validateProfileUpdate = [
   body('phone')
     .optional()
     .matches(/^[0-9]{10,15}$/)
-    .withMessage('Please enter a valid phone number'),
+    .withMessage('Phone number must be 10-15 digits'),
   body('gender')
     .optional()
     .isIn(['Male', 'Female', 'Not Selected'])
@@ -76,7 +76,9 @@ export const validateAddDoctor = [
     .normalizeEmail(),
   body('password')
     .isLength({ min: 8 })
-    .withMessage('Password must be at least 8 characters'),
+    .withMessage('Password must be at least 8 characters')
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/)
+    .withMessage('Password must contain at least one uppercase letter, one lowercase letter, and one number'),
   body('speciality')
     .trim()
     .notEmpty()
@@ -105,7 +107,16 @@ export const validateAppointmentBooking = [
     .notEmpty()
     .withMessage('Appointment date is required')
     .isISO8601()
-    .withMessage('Invalid date format'),
+    .withMessage('Invalid date format')
+    .custom((value) => {
+      const appointmentDate = new Date(value);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      if (appointmentDate < today) {
+        throw new Error('Appointment date must be today or in the future');
+      }
+      return true;
+    }),
   body('slotTime')
     .notEmpty()
     .withMessage('Appointment time is required'),
