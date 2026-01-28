@@ -6,6 +6,7 @@ import appointmentModel from "../models/appointmentModel.js";
 import jwt from "jsonwebtoken";
 import {v2 as cloudinary} from 'cloudinary'  
 import razorpay from 'razorpay';
+import logger from '../utils/logger.js';
 
     
 
@@ -42,13 +43,13 @@ const registerUser = async (req, res) => {
 
         const newUser = new userModel(userData)
         const user = await newUser.save()
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
 
         res.json({ success: true, token })
 
     } catch (error) {
-        console.log(error)
-        res.json({ success: false, message: error.message })
+        logger.error('Login error:', error)
+        res.json({ success: false, message: 'Login failed. Please try again.' })
     }
 }
 
@@ -66,7 +67,7 @@ const loginUser = async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password)
 
         if (isMatch) {
-            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
+            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' })
             res.json({ success: true, token })
         }
         else {
@@ -88,8 +89,8 @@ const getProfile = async (req, res) => {
         res.json({ success: true, userData })
 
     } catch (error) {
-        console.log(error)
-        res.json({ success: false, message: error.message })
+        logger.error('Get profile error:', error)
+        res.json({ success: false, message: 'Failed to get profile.' })
     }
 }
 
@@ -105,7 +106,7 @@ const updateProfile = async (req, res) => {
             return res.json({ success: false, message: "Data Missing" })
         }
 
-        await userModel.findByIdAndUpdate(userId, { name, phone, address: JSON.parse(address), dob, gender })
+        await userModel.findByIdAndUpdate(userId, { name, phone, address: typeof address === 'string' ? JSON.parse(address) : address, dob, gender })
 
         if (imageFile) {
 
@@ -119,8 +120,8 @@ const updateProfile = async (req, res) => {
         res.json({ success: true, message: 'Profile Updated' })
 
     } catch (error) {
-        console.log(error)
-        res.json({ success: false, message: error.message })
+        logger.error('Update profile error:', error)
+        res.json({ success: false, message: 'Failed to update profile.' })
     }
 }
 

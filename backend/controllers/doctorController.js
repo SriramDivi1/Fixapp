@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import doctorModel from "../models/doctorModel.js";
 import appointmentModel from "../models/appointmentModel.js";
+import logger from '../utils/logger.js';
 
 // Doctor login
 const loginDoctor = async (req, res) => {
@@ -18,11 +19,11 @@ const loginDoctor = async (req, res) => {
       return res.status(401).json({ success: false, message: "Invalid credentials" });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '7d' });
     res.json({ success: true, token });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: error.message });
+    logger.error('Doctor login error:', error);
+    res.status(500).json({ success: false, message: "Login failed. Please try again." });
   }
 };
 
