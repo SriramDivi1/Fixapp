@@ -42,7 +42,7 @@ interface UploadProfileImageOptions {
  * ```
  */
 export const useUploadProfileImage = (options?: UploadProfileImageOptions) => {
-  const { user, profile, refreshAuth } = useAuth();
+  const { user, refreshAuth } = useAuth();
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
