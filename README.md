@@ -129,7 +129,7 @@ To set up and run this project locally:
 1. **Clone the Repository**:
    ```bash
    git clone https://github.com/SriramDivi1/Fixapp.git
-   cd appointy
+   cd Fixapp
    ```
 
 2. **Install Dependencies**:
