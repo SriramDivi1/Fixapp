@@ -1,19 +1,18 @@
-import React, { useContext, useState } from 'react'
-import { assets } from '../assets/assets'
-import { NavLink, useNavigate, useLocation } from 'react-router-dom'
-import { AppContext } from '../context/AppContext'
+import React, { useState } from 'react';
+import { assets } from '../assets/assets';
+import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '../hooks/useAuth';
 
-const Navbar = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const [showMenu, setShowMenu] = useState(false)
-  const { token, setToken, userData } = useContext(AppContext)
+const Navbar: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [showMenu, setShowMenu] = useState(false);
+  const { user, profile, signOut } = useAuth();
 
-  const logout = () => {
-    localStorage.removeItem('token')
-    setToken(false)
-    navigate('/login')
-  }
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/login');
+  };
 
   return (
     <div className='flex items-center justify-between text-sm pt-2 pb-0 border-b border-b-gray-400'>
@@ -42,8 +41,7 @@ const Navbar = () => {
       </ul>
 
       <div className='flex items-center gap-4'>
-
-        {/* ✅ Admin Panel Button - show only on home page  */}
+        {/* Admin Panel Button - show only on home page  */}
         {location.pathname === '/' && (
           <button
             onClick={() => window.open('https://appointy-six.vercel.app', '_blank')}
@@ -53,15 +51,15 @@ const Navbar = () => {
           </button>
         )}
 
-        {token && userData ? (
+        {user && profile ? (
           <div className='flex items-center gap-2 cursor-pointer group relative'>
-            <img className='w-12 rounded-full' src={userData.image || '/fallback-user.png'} alt="profile" />
+            <img className='w-12 rounded-full' src={profile.profile_image_url || '/fallback-user.png'} alt="profile" />
             <img className='w-2.5' src={assets.dropdown_icon || '/fallback-icon.png'} alt="dropdown" />
             <div className='absolute top-0 right-0 pt-14 text-base font-medium text-gray-600 z-20 hidden group-hover:block'>
               <div className='min-w-48 bg-stone-100 rounded flex flex-col gap-4 p-4'>
-                <p onClick={() => navigate('my-profile')} className='hover:text-black cursor-pointer'>My Profile</p>
-                <p onClick={() => navigate('my-appointments')} className='hover:text-black cursor-pointer'>My Appointments</p>
-                <p onClick={logout} className='hover:text-black cursor-pointer'>Logout</p>
+                <p onClick={() => navigate('/my-profile')} className='hover:text-black cursor-pointer'>My Profile</p>
+                <p onClick={() => navigate('/my-appointments')} className='hover:text-black cursor-pointer'>My Appointments</p>
+                <p onClick={handleLogout} className='hover:text-black cursor-pointer'>Logout</p>
               </div>
             </div>
           </div>
@@ -76,7 +74,7 @@ const Navbar = () => {
 
         <img onClick={() => setShowMenu(true)} className='w-6 md:hidden' src={assets.menu_icon} alt="" />
 
-        {/* ---- Mobile Menu ---- */}
+        {/* Mobile Menu */}
         <div className={`md:hidden ${showMenu ? 'fixed w-full' : 'h-0 w-0'} right-0 top-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}>
           <div className='flex items-center justify-between px-5 py-6'>
             <img src={assets.logo} className='w-36' alt="" />
@@ -91,7 +89,7 @@ const Navbar = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

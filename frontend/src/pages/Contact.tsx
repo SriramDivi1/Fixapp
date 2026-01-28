@@ -1,10 +1,9 @@
-import React from 'react'
-import { assets } from '../assets/assets'
+import React from 'react';
+import { assets } from '../assets/assets';
 
-const Contact = () => {
+const Contact: React.FC = () => {
   return (
     <div>
-
       <div className='text-center text-2xl pt-10 text-[#707070]'>
         <p>CONTACT <span className='text-gray-700 font-semibold'>US</span></p>
       </div>
@@ -20,9 +19,8 @@ const Contact = () => {
           <button className='border border-black px-8 py-4 text-sm hover:bg-black hover:text-white transition-all duration-500'>Explore Jobs</button>
         </div>
       </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default Contact
+export default Contact;

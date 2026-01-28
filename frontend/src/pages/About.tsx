@@ -1,10 +1,9 @@
-import React from 'react'
-import { assets } from '../assets/assets'
+import React from 'react';
+import { assets } from '../assets/assets';
 
-const About = () => {
+const About: React.FC = () => {
   return (
     <div>
-
       <div className='text-center text-2xl pt-10 text-[#707070]'>
         <p>ABOUT <span className='text-gray-700 font-semibold'>US</span></p>
       </div>
@@ -37,9 +36,8 @@ const About = () => {
           <p >Tailored recommendations and reminders to help you stay on top of your health.</p>
         </div>
       </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default About
+export default About;
