@@ -171,8 +171,19 @@ appointy/
 
 ## 🤝 Contributing
 
-We welcome contributions! Please feel free to submit issues, fork the repository, and open pull requests.
+We welcome contributions! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
 
+## 📜 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📧 Contact & Support
+
+- **Project Repository**: [https://github.com/SriramDivi1/Fixapp](https://github.com/SriramDivi1/Fixapp)
+- **Issues**: [https://github.com/SriramDivi1/Fixapp/issues](https://github.com/SriramDivi1/Fixapp/issues)
+- **Pull Requests**: [https://github.com/SriramDivi1/Fixapp/pulls](https://github.com/SriramDivi1/Fixapp/pulls)
+
+For security vulnerabilities, please see our [SECURITY.md](SECURITY.md) file.
 
 ## 🌟 Acknowledgements
 
