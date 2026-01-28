@@ -122,51 +122,219 @@
   - **Razorpay Integration**
 - Ensures a secure and smooth payment experience for users.
 
+## ⚡ Quick Start
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/SriramDivi1/Fixapp.git
+cd Fixapp
+
+# 2. Install dependencies for all services
+cd backend && npm install && cd ..
+cd frontend && npm install && cd ..
+cd admin && npm install && cd ..
+
+# 3. Set up environment variables
+cp .env.example backend/.env
+# Edit backend/.env with your configuration
+
+# 4. Start all services (in separate terminals)
+cd backend && npm run dev    # Terminal 1 - API on :4000
+cd frontend && npm run dev   # Terminal 2 - App on :5173
+cd admin && npm run dev      # Terminal 3 - Admin on :5174
+```
+
 ## 🌐 Project Setup
 
 To set up and run this project locally:
 
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/SriramDivi1/Fixapp.git
-   cd appointy
-   ```
+### Prerequisites
+- Node.js 18+ and npm
+- Git
+- Supabase account (for database and authentication)
+- Razorpay account (for payment processing)
 
-2. **Install Dependencies**:
-   ```bash
-   npm install
-   cd client
-   npm install
-   ```
+### 1. Clone the Repository
+```bash
+git clone https://github.com/SriramDivi1/Fixapp.git
+cd Fixapp
+```
 
-3. **Environment Variables**:
-   - Create a `.env` file in the root directory and add the following:
-     ```env
-     MONGO_URI=your_mongodb_connection_string
-     JWT_SECRET=your_jwt_secret
-     STRIPE_API_KEY=your_stripe_api_key
-     RAZORPAY_API_KEY=your_razorpay_api_key
-     ```
+### 2. Backend Setup
+```bash
+cd backend
+npm install
 
-4. **Run the Application**:
-   ```bash
-   npm run dev
-   ```
+# Create .env file
+cp ../.env.example .env
+# Edit .env and add your configuration values
+```
+
+### 3. Frontend Setup
+```bash
+cd ../frontend
+npm install
+
+# Create .env file with frontend-specific variables if needed
+```
+
+### 4. Admin Panel Setup
+```bash
+cd ../admin
+npm install
+
+# Create .env file with admin-specific variables if needed
+```
+
+### 5. Environment Variables
+
+Create a `.env` file in the `backend` directory based on `.env.example`:
+
+```env
+# Supabase Configuration
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+
+# Backend Configuration
+NODE_ENV=development
+PORT=4000
+FRONTEND_URL=http://localhost:5173
+JWT_SECRET=your-strong-jwt-secret-key-min-32-chars
+REDIS_URL=redis://localhost:6379
+
+# Payment Gateway
+RAZORPAY_KEY_ID=your-razorpay-key-id
+RAZORPAY_KEY_SECRET=your-razorpay-key-secret
+
+# Admin Credentials
+ADMIN_EMAIL=admin@fixapp.com
+ADMIN_PASSWORD=secure-admin-password
+
+# Email Configuration (optional)
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password
+
+# Monitoring (optional)
+SENTRY_DSN=your-sentry-dsn
+LOG_LEVEL=info
+```
+
+### 6. Run the Application
+
+**Backend (API Server):**
+```bash
+cd backend
+npm run dev
+# Server will start on http://localhost:4000
+```
+
+**Frontend (Patient Portal):**
+```bash
+cd frontend
+npm run dev
+# Application will start on http://localhost:5173
+```
+
+**Admin Panel:**
+```bash
+cd admin
+npm run dev
+# Admin panel will start on http://localhost:5174
+```
+
+### 7. Using Docker (Alternative)
+
+```bash
+# Build and run all services
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+```
+
+## 🔧 Development Commands
+
+### Backend
+```bash
+cd backend
+npm run dev          # Start development server with hot reload
+npm run build        # Build TypeScript to JavaScript
+npm run start        # Start production server
+npm run lint         # Run ESLint
+npm run lint:fix     # Fix linting issues
+npm test             # Run tests
+npm run test:coverage # Run tests with coverage
+```
+
+### Frontend
+```bash
+cd frontend
+npm run dev          # Start development server
+npm run build        # Build for production
+npm run preview      # Preview production build
+npm run lint         # Run ESLint
+npm run lint:fix     # Fix linting issues
+npm test             # Run Vitest tests
+npm run test:ui      # Run tests with UI
+npm run e2e          # Run Playwright E2E tests
+```
+
+### Admin
+```bash
+cd admin
+npm run dev          # Start admin dashboard
+npm run build        # Build for production
+npm run preview      # Preview production build
+npm run lint         # Run ESLint
+npm run lint:fix     # Fix linting issues
+npm test             # Run tests
+npm run test:ui      # Run tests with UI
+```
 
 ## 📦 Folder Structure
 
 ```plaintext
-appointy/
-├── client/          # Frontend (React.js)
-├── server/          # Backend (Node.js, Express.js)
-├── models/          # MongoDB Schemas
-├── controllers/     # API Controllers
-├── routes/          # API Routes
-├── middleware/      # Authentication and Error Handling
-├── config/          # Configuration Files
-├── utils/           # Utility Functions
-├── public/          # Static Files
-└── .env             # Environment Variables
+Fixapp/
+├── frontend/             # Patient Portal (React.js 19, Vite, TypeScript)
+│   ├── src/
+│   │   ├── components/  # Reusable UI components
+│   │   ├── pages/       # Page components
+│   │   ├── context/     # React context providers
+│   │   ├── services/    # API service functions
+│   │   ├── stores/      # Zustand state management
+│   │   └── types/       # TypeScript type definitions
+│   └── package.json
+│
+├── backend/             # Backend API (Node.js, Express.js)
+│   ├── controllers/     # Request handlers
+│   ├── routes/          # API route definitions
+│   ├── middlewares/     # Authentication, validation, etc.
+│   ├── models/          # Database models
+│   ├── config/          # Configuration files
+│   ├── utils/           # Utility functions
+│   └── package.json
+│
+├── admin/               # Admin Dashboard (React.js, Vite)
+│   ├── src/
+│   │   ├── components/  # Admin UI components
+│   │   ├── pages/       # Admin pages
+│   │   └── context/     # Admin context providers
+│   └── package.json
+│
+├── supabase/            # Supabase configuration
+│   ├── migrations/      # Database migrations
+│   └── config.toml      # Supabase config
+│
+├── docker-compose.yml   # Docker compose configuration
+├── .env.example         # Environment variables template
+├── setup.sh             # Setup script
+└── README.md            # This file
 ```
 
 ## 🤝 Contributing
