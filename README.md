@@ -173,6 +173,33 @@ appointy/
 
 We welcome contributions! Please feel free to submit issues, fork the repository, and open pull requests.
 
+## 🔒 Security Best Practices
+
+### Production Deployment Checklist
+
+1. **Environment Variables**: Never commit `.env` files. Use the `.env.example` as a template.
+   - Set `NODE_ENV=production` in production
+   - Use strong, unique values for `JWT_SECRET` (at least 32 characters)
+   - Configure `FRONTEND_URL` to match your production domain
+
+2. **Rate Limiting**: The application includes rate limiting for authentication endpoints (5 attempts per 15 minutes) and general API endpoints (100 requests per 15 minutes).
+
+3. **File Upload Security**: File uploads are restricted to:
+   - Image files only (JPEG, PNG, WebP, GIF)
+   - Maximum file size: 5MB
+   - Files are renamed with unique identifiers to prevent path traversal
+
+4. **JWT Tokens**: All tokens expire after 7 days. Implement token refresh logic if needed.
+
+5. **CORS Configuration**: Update `FRONTEND_URL` environment variable to match your frontend domain to prevent unauthorized cross-origin requests.
+
+6. **Database Security**: Ensure MongoDB/Supabase connection strings use SSL and strong passwords.
+
+7. **Logging**: The application uses environment-aware logging. In production, sensitive error details are not exposed to clients.
+
+### Vulnerability Reporting
+
+If you discover a security vulnerability, please email the maintainers directly instead of creating a public issue.
 
 ## 🌟 Acknowledgements
 
