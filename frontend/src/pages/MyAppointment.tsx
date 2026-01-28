@@ -1,8 +1,12 @@
 import React from 'react';
 import { useAuth } from '../hooks/useAuth';
+import { useRealtimeAppointments } from '../hooks/useRealtimeAppointments';
 
 const MyAppointment: React.FC = () => {
   const { profile, user, loading } = useAuth();
+
+  // Enable real-time updates for appointments
+  useRealtimeAppointments(user?.id);
 
   // TODO: Replace with useAppointments hook in Phase 3
   const appointments: any[] = [];
