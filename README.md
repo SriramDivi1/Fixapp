@@ -61,7 +61,7 @@
 
 ## 📄 About Page
 
-- Provides information about **Appointy’s vision** and mission.
+- Provides information about **Fixapp’s vision** and mission.
 - **Why Choose Us** section highlights:
   - **Efficiency**: Streamlined appointment process.
   - **Convenience**: Online booking and payment.
@@ -156,7 +156,7 @@ To set up and run this project locally:
 ## 📦 Folder Structure
 
 ```plaintext
-appointy/
+Fixapp/
 ├── client/          # Frontend (React.js)
 ├── server/          # Backend (Node.js, Express.js)
 ├── models/          # MongoDB Schemas
