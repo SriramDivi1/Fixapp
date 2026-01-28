@@ -26,7 +26,7 @@ This will open a browser window for authentication.
 
 ```bash
 cd /Volumes/Sriram\ Naidu/Code/Fixapp
-supabase https://euumriuejbczhkfsffye.supabase.co
+supabase link --project-ref euumriuejbczhkfsffye
 ```
 
 **To find your project ref:**
@@ -93,20 +93,24 @@ supabase db push
 ### Production (.env)
 
 ```env
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1dW1yaXVlamJjemhrZnNmZnllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjgxOTUsImV4cCI6MjA4MTAwNDE5NX0.2wmA96LDRMOjR_O6ucsKdUPK1P3rGCrxqjE7Eq1QYak
+VITE_SUPABASE_URL=https://your-project-ref.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key-from-supabase-dashboard
 VITE_BACKEND_URL=http://localhost:4000
 VITE_RAZORPAY_KEY_ID=your-razorpay-key
 ```
+
+**To get your anon key:** Go to Supabase Dashboard → Project Settings → API → Copy the `anon` `public` key
 
 ### Local (.env.local)
 
 ```env
 VITE_SUPABASE_URL=http://localhost:54321
-VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1dW1yaXVlamJjemhrZnNmZnllIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU0MjgxOTUsImV4cCI6MjA4MTAwNDE5NX0.2wmA96LDRMOjR_O6ucsKdUPK1P3rGCrxqjE7Eq1QYak
+VITE_SUPABASE_ANON_KEY=your-local-anon-key
 VITE_BACKEND_URL=http://localhost:4000
 VITE_RAZORPAY_KEY_ID=test-key
 ```
+
+**For local development:** Run `supabase start` and copy the anon key from the output
 
 ## Common Commands
 

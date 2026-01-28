@@ -90,24 +90,30 @@ USING (
 
 -- Doctors can upload prescriptions
 -- File path must be patient_id/prescription_file
+-- Requires active appointment relationship with patient
 CREATE POLICY "Doctors upload prescriptions"
 ON storage.objects FOR INSERT
 WITH CHECK (
   bucket_id = 'prescriptions'
   AND EXISTS (
-    SELECT 1 FROM public.doctors
-    WHERE user_id = auth.uid()
+    SELECT 1 FROM public.doctors d
+    JOIN public.appointments a ON a.doctor_id = d.id
+    WHERE d.user_id = auth.uid()
+    AND a.patient_id::text = (storage.foldername(name))[1]
   )
 );
 
--- Doctors can view all prescriptions they uploaded
+-- Doctors can view prescriptions for their patients
+-- Restricted to prescriptions for patients they have appointments with
 CREATE POLICY "Doctors view own prescriptions"
 ON storage.objects FOR SELECT
 USING (
   bucket_id = 'prescriptions'
   AND EXISTS (
-    SELECT 1 FROM public.doctors
-    WHERE user_id = auth.uid()
+    SELECT 1 FROM public.doctors d
+    JOIN public.appointments a ON a.doctor_id = d.id
+    WHERE d.user_id = auth.uid()
+    AND a.patient_id::text = (storage.foldername(name))[1]
   )
 );
 
@@ -120,25 +126,29 @@ USING (
   AND auth.uid()::text = (storage.foldername(name))[1]
 );
 
--- Doctors can update prescriptions
+-- Doctors can update prescriptions for their patients only
 CREATE POLICY "Doctors update prescriptions"
 ON storage.objects FOR UPDATE
 USING (
   bucket_id = 'prescriptions'
   AND EXISTS (
-    SELECT 1 FROM public.doctors
-    WHERE user_id = auth.uid()
+    SELECT 1 FROM public.doctors d
+    JOIN public.appointments a ON a.doctor_id = d.id
+    WHERE d.user_id = auth.uid()
+    AND a.patient_id::text = (storage.foldername(name))[1]
   )
 );
 
--- Doctors can delete prescriptions
+-- Doctors can delete prescriptions for their patients only
 CREATE POLICY "Doctors delete prescriptions"
 ON storage.objects FOR DELETE
 USING (
   bucket_id = 'prescriptions'
   AND EXISTS (
-    SELECT 1 FROM public.doctors
-    WHERE user_id = auth.uid()
+    SELECT 1 FROM public.doctors d
+    JOIN public.appointments a ON a.doctor_id = d.id
+    WHERE d.user_id = auth.uid()
+    AND a.patient_id::text = (storage.foldername(name))[1]
   )
 );
 

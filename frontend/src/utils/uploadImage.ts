@@ -79,6 +79,13 @@ export async function compressImage(
                     return;
                   }
                   
+                  // Validate retry blob size
+                  const retrySizeMB = retryBlob.size / 1024 / 1024;
+                  if (retrySizeMB > maxSizeMB) {
+                    reject(new Error('Image too large even after compression'));
+                    return;
+                  }
+                  
                   const compressedFile = new File(
                     [retryBlob],
                     file.name,
