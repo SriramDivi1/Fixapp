@@ -100,13 +100,18 @@ export const validateMultiple = (validations: {
 
 /**
  * Sanitize input to prevent XSS and injection attacks
- * This is a basic sanitization - for production, consider using libraries like DOMPurify or xss
+ * Removes potentially dangerous characters and patterns
+ * Note: For production, consider using libraries like DOMPurify or validator.js
  */
-export const sanitizeInput = (input: string): string => {
-  if (typeof input !== 'string') return input;
+export const sanitizeInput = (input: unknown): string => {
+  if (typeof input !== 'string') {
+    return String(input);
+  }
   
   return input
     .replace(/[<>]/g, '') // Remove < and > to prevent HTML injection
+    .replace(/javascript:/gi, '') // Remove javascript: protocol
+    .replace(/on\w+=/gi, '') // Remove event handlers like onclick=
     .trim();
 };
 
@@ -121,7 +126,7 @@ export const sanitizeBody = (req: Request, res: Response, next: NextFunction) =>
   next();
 };
 
-function sanitizeObject(obj: any): any {
+function sanitizeObject(obj: unknown): unknown {
   if (typeof obj === 'string') {
     return sanitizeInput(obj);
   }
@@ -131,7 +136,7 @@ function sanitizeObject(obj: any): any {
   }
   
   if (obj && typeof obj === 'object') {
-    const sanitized: any = {};
+    const sanitized: Record<string, unknown> = {};
     for (const [key, value] of Object.entries(obj)) {
       sanitized[key] = sanitizeObject(value);
     }
