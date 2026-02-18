@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { UserProfile, Doctor, Appointment, Notification } from '@/types';
+import { UserProfile, Doctor, Appointment, Notification, DoctorFilters, BookingForm } from '@/types';
 import { supabase, getCurrentUser, signOut } from '@/services/supabase';
 
 interface AuthState {
@@ -37,12 +37,12 @@ interface AppState extends AuthState, DoctorsState, AppointmentsState, Notificat
   updateProfile: (data: Partial<UserProfile>) => Promise<boolean>;
   
   // Doctor actions
-  fetchDoctors: (filters?: any) => Promise<void>;
+  fetchDoctors: (filters?: DoctorFilters) => Promise<void>;
   selectDoctor: (doctor: Doctor | null) => void;
   
   // Appointment actions
   fetchAppointments: () => Promise<void>;
-  bookAppointment: (appointmentData: any) => Promise<boolean>;
+  bookAppointment: (appointmentData: BookingForm) => Promise<boolean>;
   cancelAppointment: (appointmentId: string) => Promise<boolean>;
   
   // Notification actions
@@ -99,9 +99,10 @@ export const useAppStore = create<AppState>()(
             return true;
           }
           return false;
-        } catch (error: any) {
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : 'Login failed';
           set({
-            error: error.message,
+            error: errorMessage,
             isLoading: false,
             isAuthenticated: false
           });
@@ -120,8 +121,9 @@ export const useAppStore = create<AppState>()(
             unreadCount: 0,
             error: null
           });
-        } catch (error: any) {
-          set({ error: error.message });
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : 'Logout failed';
+          set({ error: errorMessage });
         }
       },
 
@@ -149,8 +151,8 @@ export const useAppStore = create<AppState>()(
               get().fetchNotifications();
             }
           }
-        } catch (error: any) {
-          console.error('Initialization error:', error);
+        } catch (error) {
+          console.error('Initialization error:', error instanceof Error ? error.message : error);
         } finally {
           set({ isLoading: false });
         }
@@ -173,14 +175,15 @@ export const useAppStore = create<AppState>()(
           });
           
           return true;
-        } catch (error: any) {
-          set({ error: error.message });
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : 'Profile update failed';
+          set({ error: errorMessage });
           return false;
         }
       },
 
       // Doctor actions
-      fetchDoctors: async (filters?: any): Promise<void> => {
+      fetchDoctors: async (filters?: DoctorFilters): Promise<void> => {
         set({ isLoading: true, error: null });
         
         try {
@@ -207,9 +210,10 @@ export const useAppStore = create<AppState>()(
             doctors: data || [],
             isLoading: false
           });
-        } catch (error: any) {
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : 'Failed to fetch doctors';
           set({
-            error: error.message,
+            error: errorMessage,
             isLoading: false,
             doctors: []
           });
@@ -243,15 +247,16 @@ export const useAppStore = create<AppState>()(
             appointments: data || [],
             isLoading: false
           });
-        } catch (error: any) {
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : 'Failed to fetch appointments';
           set({
-            error: error.message,
+            error: errorMessage,
             isLoading: false
           });
         }
       },
 
-      bookAppointment: async (appointmentData: any): Promise<boolean> => {
+      bookAppointment: async (appointmentData: BookingForm): Promise<boolean> => {
         const { user } = get();
         if (!user) return false;
 
@@ -289,8 +294,9 @@ export const useAppStore = create<AppState>()(
           // Refresh appointments
           get().fetchAppointments();
           return true;
-        } catch (error: any) {
-          set({ error: error.message });
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : 'Failed to cancel appointment';
+          set({ error: errorMessage });
           return false;
         }
       },
@@ -316,8 +322,8 @@ export const useAppStore = create<AppState>()(
             notifications: data || [],
             unreadCount
           });
-        } catch (error: any) {
-          console.error('Error fetching notifications:', error);
+        } catch (error) {
+          console.error('Error fetching notifications:', error instanceof Error ? error.message : error);
         }
       },
 
@@ -336,8 +342,8 @@ export const useAppStore = create<AppState>()(
             ),
             unreadCount: Math.max(0, state.unreadCount - 1)
           }));
-        } catch (error: any) {
-          console.error('Error marking notification as read:', error);
+        } catch (error) {
+          console.error('Error marking notification as read:', error instanceof Error ? error.message : error);
         }
       },
 
@@ -358,8 +364,8 @@ export const useAppStore = create<AppState>()(
             notifications: state.notifications.map(n => ({ ...n, is_read: true })),
             unreadCount: 0
           }));
-        } catch (error: any) {
-          console.error('Error marking all notifications as read:', error);
+        } catch (error) {
+          console.error('Error marking all notifications as read:', error instanceof Error ? error.message : error);
         }
       },
 
