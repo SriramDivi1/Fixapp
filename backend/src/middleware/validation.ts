@@ -100,8 +100,18 @@ export const validateMultiple = (validations: {
 
 /**
  * Sanitize input to prevent XSS and injection attacks
- * Removes potentially dangerous characters and patterns
- * Note: For production, consider using libraries like DOMPurify or validator.js
+ * 
+ * IMPORTANT: This is a basic implementation for demonstration.
+ * For production use, strongly consider using battle-tested libraries:
+ * - DOMPurify (for HTML sanitization)
+ * - validator.js (for input validation and sanitization)
+ * - xss (for XSS prevention)
+ * 
+ * Simple regex replacement can miss many XSS vectors including:
+ * - Encoded characters (%3Cscript%3E)
+ * - Unicode variations (＜script＞)
+ * - Mixed case evasion
+ * - Other advanced injection techniques
  */
 export const sanitizeInput = (input: unknown): string => {
   if (typeof input !== 'string') {
@@ -111,7 +121,8 @@ export const sanitizeInput = (input: unknown): string => {
   return input
     .replace(/[<>]/g, '') // Remove < and > to prevent HTML injection
     .replace(/javascript:/gi, '') // Remove javascript: protocol
-    .replace(/on\w+=/gi, '') // Remove event handlers like onclick=
+    .replace(/on\w+\s*=/gi, '') // Remove event handlers like onclick=, onerror=
+    .replace(/&#/g, '') // Remove HTML entities that could be used for encoding attacks
     .trim();
 };
 

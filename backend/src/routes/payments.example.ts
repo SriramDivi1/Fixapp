@@ -47,8 +47,9 @@ router.post(
       // 4. Store order details in database
       
       // Example Razorpay order creation:
+      // const orderAmount = amount * 100; // Convert to paise (Indian currency subdivision)
       // const order = await razorpay.orders.create({
-      //   amount: amount * 100, // Convert to paise
+      //   amount: orderAmount,
       //   currency: 'INR',
       //   receipt: `apt_${appointment_id}`,
       //   notes: {
@@ -57,11 +58,14 @@ router.post(
       //   }
       // });
       
+      // Mock response - align with actual implementation
+      const mockOrderAmount = amount * 100; // Amount should be in paise
       res.status(201).json({
         success: true,
         data: {
           order_id: 'order_mock_123',
-          amount: amount,
+          amount: mockOrderAmount, // Returning amount in paise for consistency
+          amount_display: amount, // Original amount for display
           currency: 'INR'
         }
       });

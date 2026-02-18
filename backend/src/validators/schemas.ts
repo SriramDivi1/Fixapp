@@ -30,7 +30,9 @@ const addressSchema = z.object({
   line2: z.string().max(255).optional().default(''),
   city: z.string().min(2, 'City is required').max(100),
   state: z.string().min(2, 'State is required').max(100),
-  zip: z.string().regex(/^\d{5,10}$/, 'Invalid ZIP code')
+  // Note: This validates numeric ZIP codes (5-10 digits) for countries like USA, India
+  // For international support, consider using separate validators based on country
+  zip: z.string().regex(/^[A-Z0-9\s-]{3,10}$/i, 'Invalid postal code format')
 });
 
 // Auth schemas
@@ -156,16 +158,14 @@ export const addReviewSchema = z.object({
 export const paginationSchema = z.object({
   page: z.string()
     .regex(/^\d+$/, 'Page must be a number')
+    .default('1')
     .transform(Number)
-    .refine(val => val >= 1, 'Page must be at least 1')
-    .optional()
-    .default('1'),
+    .refine(val => val >= 1, 'Page must be at least 1'),
   limit: z.string()
     .regex(/^\d+$/, 'Limit must be a number')
+    .default('10')
     .transform(Number)
     .refine(val => val >= 1 && val <= 100, 'Limit must be between 1 and 100')
-    .optional()
-    .default('10')
 });
 
 export const doctorFilterSchema = z.object({

@@ -285,10 +285,38 @@ const { data } = await supabase
 
 ### ✅ Implemented
 
-1. **Validation middleware** sanitizes inputs
+1. **Validation middleware** sanitizes inputs (basic implementation)
 2. **Zod schemas** enforce safe data types
 3. **React auto-escaping** prevents XSS in UI
 4. **CSP headers** limit inline scripts
+
+### ⚠️ Production Recommendations
+
+**Upgrade Sanitization**: The current implementation provides basic protection but should be upgraded for production:
+
+```bash
+# Install production-grade sanitization libraries
+npm install dompurify isomorphic-dompurify validator
+```
+
+```typescript
+// Use DOMPurify for HTML content
+import DOMPurify from 'isomorphic-dompurify';
+
+export const sanitizeHtml = (dirty: string): string => {
+  return DOMPurify.sanitize(dirty, {
+    ALLOWED_TAGS: ['b', 'i', 'em', 'strong', 'p', 'br'],
+    ALLOWED_ATTR: []
+  });
+};
+
+// Use validator.js for input sanitization
+import validator from 'validator';
+
+export const sanitizeInput = (input: string): string => {
+  return validator.escape(validator.trim(input));
+};
+```
 
 ### 📖 Best Practices
 

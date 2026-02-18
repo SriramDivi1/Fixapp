@@ -6,6 +6,8 @@ export interface AuthenticatedRequest extends Request {
   user?: UserProfile;
 }
 
+const BEARER_PREFIX = 'Bearer ';
+
 export const authenticateUser = async (
   req: AuthenticatedRequest,
   res: Response,
@@ -14,14 +16,14 @@ export const authenticateUser = async (
   try {
     const authHeader = req.headers.authorization;
     
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    if (!authHeader || !authHeader.startsWith(BEARER_PREFIX)) {
       return res.status(401).json({
         success: false,
         message: 'Access token is required'
       });
     }
 
-    const token = authHeader.substring(7); // Remove 'Bearer ' prefix
+    const token = authHeader.substring(BEARER_PREFIX.length); // Remove 'Bearer ' prefix
     
     if (!token || token.trim() === '') {
       return res.status(401).json({
